@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<script src="js/tween.js"></script>
+	<style>
+		html,body{
+			width: 100%;
+			height: 100%;
+			padding: 0px;
+			margin: 0px;
+			position: relative;
+		}
+		.wrp{
+			background:#f9f9f9;
+			width:100%;
+			max-width: 640px;
+			height:100%;
+			display: block;
+			margin: 0 auto;
+			overflow:hidden;
+		}
+		.cr{position: absolute;bottom: 0px;padding: 0px 3%;}
+	</style>
+</head>
+<body>
+	<div class="wrp">
+	<svg version="1.1" id="st" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 320 640" enable-background="new 0 0 320 320" xml:space="preserve">
+		<path fill="#189848" d="M278.588,156.937c0,61.874-50.156,112.027-112.031,112.027c-61.872,0-112.033-50.153-112.033-112.027
+			c0-61.872,50.161-112.033,112.033-112.033C228.432,44.904,278.588,95.065,278.588,156.937z"/>
+		<ellipse fill="#EF9C94" cx="118.008" cy="154.738" rx="12.214" ry="10.05"/>
+		<ellipse fill="#EF9C94" cx="212.749" cy="151.833" rx="12.214" ry="10.049"/>
+		<circle fill="#F5D095" cx="166.555" cy="156.78" r="48.548"/>
+		<path fill="#EF4331" d="M127.181,86.124v34.323h74.624C201.805,120.447,190.677,85.815,127.181,86.124z"/>
+		<path fill="#FFFFFF" d="M224.963,140.855c0,2.119-1.768,3.834-3.951,3.834H113.079c-2.184,0-3.952-1.716-3.952-3.834v-18.43
+			c0-2.118,1.768-3.833,3.952-3.833h107.933c2.184,0,3.951,1.715,3.951,3.833V140.855z"/>
+		<circle fill="#FFFFFF" cx="108.731" cy="83.957" r="17.625"/>
+		<circle fill="#4C4D4B" cx="142.126" cy="151.678" r="2.164"/>
+		<circle fill="#4C4D4B" cx="190.365" cy="151.833" r="2.164"/>
+		<line fill="none" x1="116.813" y1="-8031" x2="116.813" y2="8352"/>
+		<line fill="none" x1="-8031" y1="136.375" x2="8352" y2="136.375"/>
+		<line fill="none" x1="-8031" y1="153.313" x2="8352" y2="153.313"/>
+		<line fill="none" x1="135.833" y1="-8031" x2="135.833" y2="8352"/>
+		<path fill="#FFFFFF" d="M312.291,233.406"/>
+		<line fill="none" x1="129.125" y1="-8031" x2="129.125" y2="8352"/>
+		<line fill="none" x1="-8031" y1="151.292" x2="8352" y2="151.292"/>
+		<path id="beard" fill="#FFFFFF" d="M142.126,161.882L192.126,161.882C192.126,161.882,192.126,251.882,167.126,251.882C142.126,251.882,142.126,161.882,142.126,161.882Z"/>
+		<ellipse fill="#EF9C94" cx="166.555" cy="161.882" rx="10.145" ry="8.347"/>
+		<path fill="#6D6D74" d="M158.855,174.665h15.4C169.928,183.116,163.038,183.631,158.855,174.665z"/>
+	</svg>
+	<div class="cr">
+		<p>项目地址：<a href="https://github.com/cyclegtx/santa_claus">github</a></p>
+		<p>更多教程请访问：<a href="http://ued.sexy">ued.sexy</a></p>
+	</div>
+	</div>
+	<script>
+	var useTouch = "ontouchstart" in window,
+		evtStart = useTouch?'touchstart':'mousedown',
+		evtMove	 = useTouch?'touchmove':'mousemove',
+		evtEnd	 = useTouch?'touchend':'mouseup';
+	var touchendtime = 0,
+		touched = false,
+	    rebounce = false;
+	var sx = 0,sy=0,dx=0,dy=0;
+	var md ={
+		p1 :{
+			x:122.126,
+			y:161.882
+		},
+		p2 :{
+			x:212.126,
+			y:161.882
+		},
+		p3 :{
+			x:167.126,
+			y:251.882
+		},
+		cp1 :{
+			x:292.126,
+			y:251.882
+		},
+		cp2 :{
+			x:42.126,
+			y:251.882
+		}
+	}
+	var smd = null,
+		emd = null,
+		omd = JSON.parse(JSON.stringify(md));
+	function drawMT(){
+		var path = "M"+md.p1.x+","+md.p1.y+"L"+md.p2.x+","+md.p2.y+"C"+md.p2.x+","+md.p2.y+","+md.cp1.x+","+md.cp1.y+","+md.p3.x+","+md.p3.y
+					+"C"+md.cp2.x+","+md.cp2.y+","+md.p1.x+","+md.p1.y+","+md.p1.x+","+md.p1.y+"Z";
+		document.getElementById("beard").setAttribute("d",path);
+	}
+	drawMT();
+	document.addEventListener(evtStart,function(e){
+		touched = true;
+		rebounce = false;
+		sx = useTouch?e.changedTouches[0].clientX:e.clientX,
+		sy = useTouch?e.changedTouches[0].clientY:e.clientY;
+		smd = JSON.parse(JSON.stringify(md));
+	});
+	document.addEventListener(evtMove,function(e){
+		e.preventDefault();
+		if(!touched) return;
+		var tx =useTouch?e.changedTouches[0].clientX:e.clientX,
+			ty =useTouch?e.changedTouches[0].clientY:e.clientY;
+		dx = tx - sx,
+		dy = ty - sy;
+		var tmpy = Math.log(dy-1)*5;
+		tmpy = dy/5 < tmpy?dy/5:tmpy;
+		if(dy <= -130){
+			dy = -130;
+			
+		}
+		if(dy <=0){
+			tmpy = 0;
+		}
+
+		md.p3.y  = smd.p3.y + dy/5;
+		md.cp1.y = smd.cp1.y + dy/5;
+		md.cp2.y = smd.cp2.y + dy/5;
+
+
+		md.p1.x = smd.p1.x + tmpy;
+		md.p2.x = smd.p2.x - tmpy;
+		md.p3.x = smd.p3.x + dx/10;
+		md.cp1.x = smd.cp1.x + dx/10 - tmpy;
+		md.cp2.x = smd.cp2.x + dx/10 + tmpy;
+		
+		drawMT();
+	});
+	document.addEventListener(evtEnd,function(e){
+		touched = false;
+		touchendtime = new Date().getTime();
+		rebounce = true;
+		emd = JSON.parse(JSON.stringify(md));
+	});
+	function resetMT () {
+		var dt = new Date().getTime() - touchendtime;
+		rebounce = false;
+		for(var i in md){
+			for(var n in md[i]){
+				if(md[i][n] != omd[i][n]){
+					rebounce = true;
+					md[i][n] = Tween.Bounce.easeOut(dt, emd[i][n], omd[i][n] - emd[i][n], 500);
+					if(omd[i][n] > emd[i][n]){
+						if(md[i][n] > omd[i][n]){
+							md[i][n] = omd[i][n]
+						}
+					}else if(omd[i][n] < emd[i][n]){
+						if(md[i][n] < omd[i][n]){
+							md[i][n] = omd[i][n]
+						}
+					}
+				}
+			}
+		}
+		drawMT();
+	}
+	window.requestAnimationFrame = (function(){
+	  return  window.requestAnimationFrame       ||
+	          window.webkitRequestAnimationFrame ||
+	          window.mozRequestAnimationFrame    ||
+	          function( callback ){
+	            window.setTimeout(callback, 1000 / 60);
+	          };
+	})();
+	function loop(time){
+		if(rebounce){
+			resetMT();
+		}
+		requestAnimationFrame(loop);
+	}
+	loop();
+	</script>
+</body>
+</html>
